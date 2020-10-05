@@ -17,6 +17,9 @@ SetOrientationAllowed( 1, 1, 1, 1 ) // allow both portrait and landscape on mobi
 SetSyncRate( 30, 0 ) // 30fps instead of 60 to save battery
 SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black borders
 UseNewDefaultFonts( 1 ) // since version 2.0.22 we can use nicer default fonts
+// Variables
+turkeyCaught = 0
+gameOver = 0
 
 // Images
 LoadImage(1, "turkey.png")
@@ -92,7 +95,49 @@ do
 	 if farmerY < 0
 		 farmerY = 0
 	 endif
-	 
+	// Turkey Farmer Collision
+	if GetSpriteCollision(1, 2)
+		//reset farmer and turkey positions
+		turkeyX = Random(0, GetVirtualWidth() - GetSpriteWidth(1))
+		turkeyY = Random(0, GetVirtualHeight() - GetSpriteHeight(1))
+		SetSpritePosition(1, turkeyX, turkeyY)
+		farmerX = farmerStartX
+		farmerY = farmerStartY
+		SetSpritePosition(2, farmerX, farmerY)
+		turkeyCaught = turkeyCaught + 1 // increases score by 1
+		if turkeySPD < 25 // give turkeySPD a max 
+			turkeySPD = turkeySPD + 3 // speed increases after each one is caught
+		endif
+		if turkeyCaught > 0
+			gameOver = 1
+		endif	
+	endif
+	Printc("Turkeys Caught: ")
+	Print(turkeyCaught)
+	
+	while gameover = 1
+		SetSpritePosition(1, GetVirtualWidth(), GetVirtualHeight())
+		SetSpritePosition(2, GetVirtualHeight(), GetVirtualHeight())
+		Print("Game Over")
+		Print("You won")
+		Print("Play again? Y/N")
+		if GetRawKeyPressed(89) = 1 // 'y' key
+			turkeyCaught = 0 
+			turkeyX = Random(0, GetVirtualWidth() - GetSpriteWidth(1))
+			turkeyY = Random(0, GetVirtualHeight() - GetSpriteHeight(1))
+			SetSpritePosition(1, turkeyX, turkeyY)
+			farmerX = farmerStartX
+			farmerY = farmerStartY
+			SetSpritePosition(2, farmerX, farmerY)
+			turkeySPD = 5
+			gameover = 0
+		 endif
+		if GetRawKeyPressed(78) = 1 // 'n' key
+			end // closes the program
+		endif
+		Sync()
+	endwhile
+		
     SetSpritePosition(1, turkeyX, turkeyY)
     SetSpritePosition(2, farmerX, farmerY)
     Sync()
