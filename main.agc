@@ -24,13 +24,21 @@ gameOver = 0
 // Images
 LoadImage(1, "turkey.png")
 LoadImage(2, "farmer.png")
+CreateImageColor(3, 255, 200, 70, 255)
+
+
+// Create Background
+CreateSprite(99,3)
+SetSpriteSize(99, GetVirtualWidth(), GetVirtualHeight())
+SetSpritePosition(99, 0, 30)
 
 // Create Turkey
 CreateSprite(1,1)
 SetSpriteScale(1, 0.25, 0.25)
 SetSpriteFlip(1,1,0)
-turkeyX = 0
-turkeyY = 0
+turkeyX = Random(0, GetVirtualWidth() - GetSpriteWidth(1))
+turkeyY = Random(40, GetVirtualHeight() - GetSpriteHeight(1))
+SetSpritePosition(1, turkeyX, turkeyY)
 turkeySPD = 5
 turkeyDirX = 1
 turkeyDirY = 1
@@ -61,7 +69,7 @@ do
 		turkeyDirY = - 1
 		
 	endif
-	if turkeyY < 0
+	if turkeyY < 40
 		turkeyDirY = 1
 	endif
 	
@@ -92,14 +100,14 @@ do
 	 if farmerY > GetVirtualHeight() - GetSpriteHeight(2)
 		 farmerY = GetVirtualHeight() - GetSpriteHeight(2)
 	 endif
-	 if farmerY < 0
-		 farmerY = 0
+	 if farmerY < 40
+		 farmerY = 40
 	 endif
 	// Turkey Farmer Collision
 	if GetSpriteCollision(1, 2)
 		//reset farmer and turkey positions
 		turkeyX = Random(0, GetVirtualWidth() - GetSpriteWidth(1))
-		turkeyY = Random(0, GetVirtualHeight() - GetSpriteHeight(1))
+		turkeyY = Random(40, GetVirtualHeight() - GetSpriteHeight(1))
 		SetSpritePosition(1, turkeyX, turkeyY)
 		farmerX = farmerStartX
 		farmerY = farmerStartY
